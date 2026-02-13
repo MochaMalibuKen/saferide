@@ -1,0 +1,455 @@
+/* =========================================
+   SAFE RIDE FUNERAL ESCORTS OF CSRA
+   Brand-Driven Stylesheet
+   ========================================= */
+
+/* Color Palette (Brand) */
+:root {
+  --black: #000000;
+  --gold: #d4af37; /* Honor Gold */
+  --white: #ffffff;
+  --gray: #b3b3b3; /* Procession Gray */
+  --charcoal: #1a1a1a; /* Midnight Charcoal */
+
+  --font-heading: "Cinzel", serif;
+  --font-body: "Lora", serif;
+
+  --max-width: 1120px;
+}
+
+/* Global Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--black);
+  color: var(--white);
+  line-height: 1.6;
+}
+
+/* Layout Utilities */
+.sr-container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.sr-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .sr-grid {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .sr-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.sr-grid--3 {
+  display: grid;
+  gap: 1.75rem;
+}
+
+/* Header & Navigation */
+.sr-header {
+  background-color: var(--charcoal);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sr-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+}
+
+/* Logo Rules:
+   - Minimum height for visibility
+   - Clear space (approx. 1 dove height) is enforced with padding/margin
+*/
+.sr-logo-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.sr-logo {
+  height: 60px; /* Digital min height ~ 150px overall area on hero; can adjust on larger screens */
+  display: block;
+  object-fit: contain;
+}
+
+/* Larger version used in hero badge */
+.sr-logo--bordered {
+  height: 150px;
+}
+
+.sr-logo--wide {
+  max-width: 210px;
+}
+
+.sr-logo--badge {
+  max-width: 260px;
+}
+
+@media (min-width: 992px) {
+  .sr-logo {
+    height: 70px;
+  }
+  .sr-logo--bordered {
+    height: 180px;
+  }
+
+  .sr-logo--wide {
+    max-width: 260px;
+  }
+
+  .sr-logo--badge {
+    max-width: 300px;
+  }
+}
+
+/* Navigation */
+.sr-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.sr-nav__link {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+}
+
+.sr-nav__link:hover,
+.sr-nav__link:focus-visible {
+  outline: none;
+  color: var(--gold);
+}
+
+.sr-nav__link--highlight {
+  border: 1px solid var(--gold);
+}
+
+/* Hero */
+.sr-hero {
+  background: radial-gradient(circle at top, #262626 0, var(--black) 45%, #000000 100%);
+  padding: 4rem 0 3rem;
+}
+
+.sr-hero__content {
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 900px) {
+  .sr-hero__content {
+    grid-template-columns: 3fr 2fr;
+    align-items: center;
+  }
+}
+
+.sr-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 0.75rem;
+}
+
+.sr-hero__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.4rem;
+  margin: 0 0 1rem;
+}
+
+.sr-hero__subtitle {
+  font-size: 1.05rem;
+  max-width: 32rem;
+  color: var(--gray);
+  margin: 0 0 1.75rem;
+}
+
+.sr-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sr-hero__badge {
+  justify-self: center;
+}
+
+/* Buttons */
+.sr-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--white);
+}
+
+.sr-button--primary {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+.sr-button--primary:hover,
+.sr-button--primary:focus-visible {
+  background-color: #c29d30;
+}
+
+.sr-button--outline {
+  border-color: var(--gold);
+}
+
+.sr-button--outline:hover,
+.sr-button--outline:focus-visible {
+  background-color: rgba(212, 175, 55, 0.08);
+}
+
+.sr-button--full {
+  width: 100%;
+}
+
+/* Sections */
+.sr-section {
+  padding: 3.5rem 0;
+  background-color: var(--black);
+}
+
+.sr-section--alt {
+  background-color: var(--charcoal);
+}
+
+
+.sr-section__title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sr-subtitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Cards */
+.sr-card,
+.sr-section__card {
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: linear-gradient(145deg, #111111, #181818);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.sr-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Lists */
+.sr-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sr-list--check li,
+.sr-list--dash li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sr-list--check li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--gold);
+}
+
+.sr-list--dash li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--gold);
+}
+
+/* Forms */
+.sr-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.sr-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sr-form__group--split {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .sr-form__group--split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sr-form label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sr-form input,
+.sr-form select,
+.sr-form textarea {
+  background-color: #101010;
+  border-radius: 0.5rem;
+  border: 1px solid #333333;
+  padding: 0.65rem 0.75rem;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.sr-form input:focus,
+.sr-form select:focus,
+.sr-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.sr-form__note {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin: 0.5rem 0 0;
+}
+
+/* Business Info Panel */
+.sr-business-info__name {
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+}
+
+.sr-business-info__item {
+  margin: 0 0 0.75rem;
+}
+
+/* Contact list */
+.sr-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+
+.sr-contact-list li {
+  margin-bottom: 0.75rem;
+}
+
+/* Footer */
+.sr-footer {
+  border-top: 1px solid rgba(212, 175, 55, 0.4);
+  background-color: var(--black);
+}
+
+.sr-footer__inner {
+  padding: 1.25rem 1.25rem 1.75rem;
+  text-align: center;
+}
+
+.sr-footer__text {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+.sr-footer__text--small {
+  font-size: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .sr-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .sr-nav {
+    justify-content: flex-start;
+  }
+
+  .sr-hero {
+    padding-top: 3rem;
+  }
+
+  .sr-hero__title {
+    font-size: 2rem;
+  }
+
+  .sr-section {
+    padding: 3rem 0;
+  }
+}
+
+/* Brand Protection Notes (non-enforced, but for reference)
+   - Do NOT use playful, rounded, or tech fonts.
+   - Do NOT apply drop shadows, glow effects, or gradients to the logo.
+   - Use black or very dark backgrounds for logo wherever possible.
+   - Avoid tan, cream, or brown backgrounds that reduce contrast.
+*/
