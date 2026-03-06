@@ -214,6 +214,7 @@
           </p>
 
           <form
+            id="escort-request-form"
             class="sr-form"
             action="https://formsubmit.co/hello@saferideescorts.com"
             method="POST"
@@ -221,6 +222,7 @@
             <input type="hidden" name="_subject" value="New Safe Ride Escort Request" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
               <input type="text" id="name" name="name" required />
@@ -386,8 +388,30 @@
   </footer>
 
   <script>
-    // Simple current-year display, no other JS required for now
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    function getEasternTimestamp() {
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZoneName: 'short'
+      }).format(new Date());
+    }
+
+    const requestForm = document.getElementById('escort-request-form');
+    const submittedAtEastern = document.getElementById('submitted-at-et');
+
+    if (requestForm && submittedAtEastern) {
+      requestForm.addEventListener('submit', function () {
+        submittedAtEastern.value = getEasternTimestamp();
+      });
+    }
   </script>
 </body>
 </html>
