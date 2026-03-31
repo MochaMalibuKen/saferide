@@ -378,6 +378,19 @@ body {
   margin: 0.5rem 0 0;
 }
 
+.sr-form__status {
+  font-family: var(--font-heading);
+  letter-spacing: 0.03em;
+}
+
+.sr-form__status--success {
+  color: #8fd19e;
+}
+
+.sr-form__status--error {
+  color: #ff8e8e;
+}
+
 /* Business Info Panel */
 .sr-business-info__name {
   font-family: var(--font-heading);

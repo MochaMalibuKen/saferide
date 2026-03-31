@@ -222,6 +222,7 @@
             <input type="hidden" name="_subject" value="New Safe Ride Escort Request" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="https://www.saferideescorts.com/#request" />
             <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
@@ -295,6 +296,7 @@
             <button type="submit" class="sr-button sr-button--primary">
               Submit Escort Request
             </button>
+            <p id="form-status" class="sr-form__note sr-form__status" aria-live="polite"></p>
           </form>
         </div>
 
@@ -406,10 +408,54 @@
 
     const requestForm = document.getElementById('escort-request-form');
     const submittedAtEastern = document.getElementById('submitted-at-et');
+    const formStatus = document.getElementById('form-status');
+    const submitButton = requestForm ? requestForm.querySelector('button[type="submit"]') : null;
+
+    function setFormStatus(message, state) {
+      if (!formStatus) return;
+      formStatus.textContent = message;
+      formStatus.classList.remove('sr-form__status--success', 'sr-form__status--error');
+      if (state === 'success') formStatus.classList.add('sr-form__status--success');
+      if (state === 'error') formStatus.classList.add('sr-form__status--error');
+    }
 
     if (requestForm && submittedAtEastern) {
-      requestForm.addEventListener('submit', function () {
+      requestForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
         submittedAtEastern.value = getEasternTimestamp();
+
+        setFormStatus('Sending request...');
+
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Sending...';
+        }
+
+        try {
+          const formData = new FormData(requestForm);
+          const response = await fetch('https://formsubmit.co/ajax/hello@saferideescorts.com', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json'
+            },
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error('Request failed');
+          }
+
+          requestForm.reset();
+
+          setFormStatus('Request sent successfully. We will contact you shortly.', 'success');
+        } catch (error) {
+          setFormStatus('We could not send your request online. Please call (706) 229-2976.', 'error');
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Escort Request';
+          }
+        }
       });
     }
   </script>
