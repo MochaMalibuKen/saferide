@@ -424,6 +424,7 @@
       requestForm.addEventListener('submit', async function (event) {
         event.preventDefault();
         submittedAtEastern.value = getEasternTimestamp();
+        let fallbackToNativeSubmit = false;
 
         setFormStatus('Sending request...');
 
@@ -450,9 +451,13 @@
 
           setFormStatus('Request sent successfully. We will contact you shortly.', 'success');
         } catch (error) {
-          setFormStatus('We could not send your request online. Please call (706) 229-2976.', 'error');
+          fallbackToNativeSubmit = true;
+          setFormStatus('Online submit failed. Trying secure backup submit now...', 'error');
+          setTimeout(function () {
+            requestForm.submit();
+          }, 400);
         } finally {
-          if (submitButton) {
+          if (submitButton && !fallbackToNativeSubmit) {
             submitButton.disabled = false;
             submitButton.textContent = 'Submit Escort Request';
           }
