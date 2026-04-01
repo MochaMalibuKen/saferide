@@ -234,6 +234,13 @@ body {
   background-color: #c29d30;
 }
 
+.sr-button--primary:disabled {
+  background-color: #8f7626;
+  color: rgba(0, 0, 0, 0.75);
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
 .sr-button--outline {
   border-color: var(--gold);
 }

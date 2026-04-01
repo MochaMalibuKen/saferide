@@ -216,10 +216,15 @@
           <form
             id="escort-request-form"
             class="sr-form"
-            action="https://formspree.io/f/xdkdqdjp"
+            action="https://formsubmit.co/hello@saferideescorts.com"
             method="POST"
+            target="_blank"
           >
             <input type="hidden" name="_subject" value="New Safe Ride Escort Request" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_cc" value="tarrencemoore126@gmail.com" />
+            <input type="hidden" name="_next" value="https://www.saferideescorts.com/#request" />
             <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
@@ -423,6 +428,10 @@
         if (submitButton) {
           submitButton.disabled = true;
           submitButton.textContent = 'Submitting...';
+          setTimeout(function () {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit Escort Request';
+          }, 4000);
         }
       });
     }
