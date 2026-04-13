@@ -264,6 +264,20 @@ body {
   background-color: var(--charcoal);
 }
 
+.sr-video-wrap {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: #070707;
+}
+
+.sr-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 75vh;
+}
 
 .sr-section__title {
   font-family: var(--font-heading);
