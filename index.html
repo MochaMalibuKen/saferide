@@ -234,15 +234,17 @@
           <form
             id="escort-request-form"
             class="sr-form"
-            action="https://formsubmit.co/hello@saferideescorts.com"
+            action="https://formsubmit.co/el/dipomi"
             method="POST"
           >
-            <input type="hidden" name="_subject" value="New Safe Ride Escort Request" />
+            <input type="hidden" name="_subject" value="[SafeRide Lead] New Safe Ride Escort Request" />
             <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_cc" value="tarrencemoore126@gmail.com" />
+            <input type="hidden" name="_cc" value="hello@saferideescorts.com,tarrencemoore126@gmail.com" />
+            <input type="hidden" name="_blacklist" value="viagra,casino,crypto,loan" />
+            <input type="hidden" id="reply-to-email" name="_replyto" value="" />
             <input type="hidden" name="_next" value="https://www.saferideescorts.com/#request" />
             <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
               <input type="text" id="name" name="name" required />
@@ -427,8 +429,11 @@
 
     const requestForm = document.getElementById('escort-request-form');
     const submittedAtEastern = document.getElementById('submitted-at-et');
+    const replyToEmail = document.getElementById('reply-to-email');
+    const emailInput = document.getElementById('email');
     const formStatus = document.getElementById('form-status');
     const submitButton = requestForm ? requestForm.querySelector('button[type="submit"]') : null;
+    let isFallbackSubmitting = false;
 
     function setFormStatus(message, state) {
       if (!formStatus) return;
@@ -440,8 +445,12 @@
 
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
+        if (isFallbackSubmitting) return;
         event.preventDefault();
         submittedAtEastern.value = getEasternTimestamp();
+        if (replyToEmail && emailInput) {
+          replyToEmail.value = emailInput.value.trim();
+        }
         setFormStatus('Sending your request...');
         if (submitButton) {
           submitButton.disabled = true;
@@ -450,22 +459,30 @@
 
         try {
           const formData = new FormData(requestForm);
-          const response = await fetch('https://formsubmit.co/ajax/hello@saferideescorts.com', {
+          const response = await fetch('https://formsubmit.co/ajax/el/dipomi', {
             method: 'POST',
             headers: {
               Accept: 'application/json'
             },
             body: formData
           });
+          const result = await response.json().catch(() => null);
 
-          if (!response.ok) {
+          if (
+            !response.ok ||
+            !result ||
+            (result.success !== true && result.success !== 'true')
+          ) {
             throw new Error('Submission failed');
           }
 
           setFormStatus('Request submitted successfully. Our team will contact you shortly.', 'success');
           requestForm.reset();
         } catch (error) {
-          setFormStatus('We could not submit your request online. Please call (706) 229-2976.', 'error');
+          setFormStatus('Online submit had an issue. Retrying with direct send...', 'error');
+          isFallbackSubmitting = true;
+          requestForm.submit();
+          return;
         } finally {
           if (submitButton) {
             submitButton.disabled = false;
