@@ -245,7 +245,15 @@
 
             <div class="sr-form__group">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="fi-sender-phone" required />
+              <input
+                type="tel"
+                id="phone"
+                name="fi-sender-phone"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+17062292976"
+                required
+              />
             </div>
 
             <div class="sr-form__group">
@@ -428,6 +436,7 @@
 
     const requestForm = document.getElementById('escort-request-form');
     const submittedAtEastern = document.getElementById('submitted-at-et');
+    const phoneInput = document.getElementById('phone');
     const formStatus = document.getElementById('form-status');
     const submitButton = requestForm ? requestForm.querySelector('button[type="submit"]') : null;
     const forminitFormId = 'hpsynucq7cv';
@@ -441,10 +450,44 @@
       if (state === 'error') formStatus.classList.add('sr-form__status--error');
     }
 
+    function normalizePhoneNumber(value) {
+      const trimmedValue = value.trim();
+      const digits = trimmedValue.replace(/\D/g, '');
+
+      if (trimmedValue.startsWith('+')) {
+        const internationalNumber = `+${digits}`;
+        return /^\+[1-9]\d{1,14}$/.test(internationalNumber) ? internationalNumber : '';
+      }
+
+      if (digits.length === 10) {
+        return `+1${digits}`;
+      }
+
+      if (digits.length === 11 && digits.startsWith('1')) {
+        return `+${digits}`;
+      }
+
+      return '';
+    }
+
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
         if (isFallbackSubmitting) return;
         submittedAtEastern.value = getEasternTimestamp();
+        if (phoneInput) {
+          const normalizedPhone = normalizePhoneNumber(phoneInput.value);
+          phoneInput.setCustomValidity('');
+
+          if (!normalizedPhone) {
+            event.preventDefault();
+            phoneInput.setCustomValidity('Enter a valid phone number, including area code.');
+            phoneInput.reportValidity();
+            setFormStatus('Please enter a valid phone number with area code.', 'error');
+            return;
+          }
+
+          phoneInput.value = normalizedPhone;
+        }
 
         if (!window.Forminit) {
           return;
