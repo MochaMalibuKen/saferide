@@ -234,41 +234,33 @@
           <form
             id="escort-request-form"
             class="sr-form"
-            action="https://formsubmit.co/hello@saferideescorts.com"
+            action="https://forminit.com/f/hpsynucq7cv"
             method="POST"
           >
-            <input type="hidden" name="_subject" value="[SafeRide Lead] New Safe Ride Escort Request" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_cc" value="hello@saferideescorts.com,tarrencemoore126@gmail.com" />
-            <input type="hidden" name="_blacklist" value="viagra,casino,crypto,loan" />
-            <input type="hidden" id="reply-to-email" name="_replyto" value="" />
-            <input type="hidden" name="_next" value="https://www.saferideescorts.com/#request" />
-            <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
-            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+            <input type="hidden" id="submitted-at-et" name="fi-text-submitted-at-eastern" value="" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" required />
+              <input type="text" id="name" name="fi-sender-fullName" required />
             </div>
 
             <div class="sr-form__group">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" required />
+              <input type="tel" id="phone" name="fi-sender-phone" required />
             </div>
 
             <div class="sr-form__group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required />
+              <input type="email" id="email" name="fi-sender-email" required />
             </div>
 
             <div class="sr-form__group">
               <label for="funeral-home">Funeral Home (if applicable)</label>
-              <input type="text" id="funeral-home" name="funeral_home" />
+              <input type="text" id="funeral-home" name="fi-text-funeral-home" />
             </div>
 
             <div class="sr-form__group">
               <label for="service-type">Service Type</label>
-              <select id="service-type" name="service_type" required>
+              <select id="service-type" name="fi-select-service-type" required>
                 <option value="">Select an option</option>
                 <option value="procession">Funeral Procession Escort</option>
                 <option value="honor-escort">Honor Escort (Veteran / Civic Leader)</option>
@@ -280,34 +272,34 @@
             <div class="sr-form__group sr-form__group--split">
               <div>
                 <label for="date">Service Date</label>
-                <input type="date" id="date" name="date" required />
+                <input type="date" id="date" name="fi-date-service-date" required />
               </div>
               <div>
                 <label for="time">Service Time</label>
-                <input type="time" id="time" name="time" required />
+                <input type="time" id="time" name="fi-text-service-time" required />
               </div>
             </div>
 
             <div class="sr-form__group">
               <label for="start-location">Starting Location</label>
-              <input type="text" id="start-location" name="start_location" required />
+              <input type="text" id="start-location" name="fi-text-starting-location" required />
             </div>
 
             <div class="sr-form__group">
               <label for="funeral-location">Funeral Location</label>
-              <input type="text" id="funeral-location" name="funeral_location" required />
+              <input type="text" id="funeral-location" name="fi-text-funeral-location" required />
             </div>
 
             <div class="sr-form__group">
               <label for="burial-site">Burial Site</label>
-              <input type="text" id="burial-site" name="burial_site" required />
+              <input type="text" id="burial-site" name="fi-text-burial-site" required />
             </div>
 
             <div class="sr-form__group">
               <label for="notes">Additional Details</label>
               <textarea
                 id="notes"
-                name="notes"
+                name="fi-text-additional-details"
                 rows="4"
                 placeholder="Procession size, special requests, or other details."
               ></textarea>
@@ -416,6 +408,7 @@
     </div>
   </footer>
 
+  <script src="https://forminit.com/sdk/v1/forminit.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -435,10 +428,9 @@
 
     const requestForm = document.getElementById('escort-request-form');
     const submittedAtEastern = document.getElementById('submitted-at-et');
-    const replyToEmail = document.getElementById('reply-to-email');
-    const emailInput = document.getElementById('email');
     const formStatus = document.getElementById('form-status');
     const submitButton = requestForm ? requestForm.querySelector('button[type="submit"]') : null;
+    const forminitFormId = 'hpsynucq7cv';
     let isFallbackSubmitting = false;
 
     function setFormStatus(message, state) {
@@ -449,22 +441,16 @@
       if (state === 'error') formStatus.classList.add('sr-form__status--error');
     }
 
-    function getAjaxSubmitUrl(form) {
-      const actionUrl = new URL(form.action);
-      if (actionUrl.hostname === 'formsubmit.co' && !actionUrl.pathname.startsWith('/ajax/')) {
-        actionUrl.pathname = `/ajax${actionUrl.pathname}`;
-      }
-      return actionUrl.toString();
-    }
-
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
         if (isFallbackSubmitting) return;
-        event.preventDefault();
         submittedAtEastern.value = getEasternTimestamp();
-        if (replyToEmail && emailInput) {
-          replyToEmail.value = emailInput.value.trim();
+
+        if (!window.Forminit) {
+          return;
         }
+
+        event.preventDefault();
         setFormStatus('Sending your request...');
         if (submitButton) {
           submitButton.disabled = true;
@@ -472,21 +458,11 @@
         }
 
         try {
+          const forminit = new Forminit();
           const formData = new FormData(requestForm);
-          const response = await fetch(getAjaxSubmitUrl(requestForm), {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json'
-            },
-            body: formData
-          });
-          const result = await response.json().catch(() => null);
+          const result = await forminit.submit(forminitFormId, formData);
 
-          if (
-            !response.ok ||
-            !result ||
-            (result.success !== true && result.success !== 'true')
-          ) {
+          if (result && result.error) {
             throw new Error('Submission failed');
           }
 
