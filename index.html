@@ -239,6 +239,7 @@
           >
             <input type="hidden" name="_subject" value="[SafeRide Lead] New Safe Ride Escort Request" />
             <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_cc" value="hello@saferideescorts.com,tarrencemoore126@gmail.com" />
             <input type="hidden" name="_blacklist" value="viagra,casino,crypto,loan" />
             <input type="hidden" id="reply-to-email" name="_replyto" value="" />
@@ -448,6 +449,14 @@
       if (state === 'error') formStatus.classList.add('sr-form__status--error');
     }
 
+    function getAjaxSubmitUrl(form) {
+      const actionUrl = new URL(form.action);
+      if (actionUrl.hostname === 'formsubmit.co' && !actionUrl.pathname.startsWith('/ajax/')) {
+        actionUrl.pathname = `/ajax${actionUrl.pathname}`;
+      }
+      return actionUrl.toString();
+    }
+
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
         if (isFallbackSubmitting) return;
@@ -464,7 +473,7 @@
 
         try {
           const formData = new FormData(requestForm);
-          const response = await fetch('https://formsubmit.co/ajax/el/dipomi', {
+          const response = await fetch(getAjaxSubmitUrl(requestForm), {
             method: 'POST',
             headers: {
               Accept: 'application/json'
