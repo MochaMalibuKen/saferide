@@ -234,16 +234,13 @@
           <form
             id="escort-request-form"
             class="sr-form"
-            action="https://api.web3forms.com/submit"
+            action="https://forminit.com/f/hpsynucq7cv"
             method="POST"
           >
-            <input type="hidden" name="access_key" value="ac596c34-f8e3-4558-8c8e-70ecdca9313c" />
-            <input type="hidden" name="subject" value="[SafeRide Lead] New Safe Ride Escort Request" />
-            <input type="hidden" name="from_name" value="Safe Ride Funeral Escorts Website" />
-            <input type="hidden" id="submitted-at-et" name="submitted_at_eastern" value="" />
+            <input type="hidden" id="submitted-at-et" name="fi-text-submittedAtEastern" value="" />
             <div class="sr-form__group">
               <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" required />
+              <input type="text" id="name" name="fi-sender-fullName" required />
             </div>
 
             <div class="sr-form__group">
@@ -251,7 +248,7 @@
               <input
                 type="tel"
                 id="phone"
-                name="phone"
+                name="fi-sender-phone"
                 autocomplete="tel"
                 inputmode="tel"
                 placeholder="+17062292976"
@@ -261,17 +258,17 @@
 
             <div class="sr-form__group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required />
+              <input type="email" id="email" name="fi-sender-email" required />
             </div>
 
             <div class="sr-form__group">
               <label for="funeral-home">Funeral Home (if applicable)</label>
-              <input type="text" id="funeral-home" name="funeral_home" />
+              <input type="text" id="funeral-home" name="fi-sender-company" />
             </div>
 
             <div class="sr-form__group">
               <label for="service-type">Service Type</label>
-              <select id="service-type" name="service_type" required>
+              <select id="service-type" name="fi-select-serviceType" required>
                 <option value="">Select an option</option>
                 <option value="procession">Funeral Procession Escort</option>
                 <option value="honor-escort">Honor Escort (Veteran / Civic Leader)</option>
@@ -283,34 +280,34 @@
             <div class="sr-form__group sr-form__group--split">
               <div>
                 <label for="date">Service Date</label>
-                <input type="date" id="date" name="service_date" required />
+                <input type="date" id="date" name="fi-date-serviceDate" required />
               </div>
               <div>
                 <label for="time">Service Time</label>
-                <input type="time" id="time" name="service_time" required />
+                <input type="time" id="time" name="fi-text-serviceTime" required />
               </div>
             </div>
 
             <div class="sr-form__group">
               <label for="start-location">Starting Location</label>
-              <input type="text" id="start-location" name="starting_location" required />
+              <input type="text" id="start-location" name="fi-text-startingLocation" required />
             </div>
 
             <div class="sr-form__group">
               <label for="funeral-location">Funeral Location</label>
-              <input type="text" id="funeral-location" name="funeral_location" required />
+              <input type="text" id="funeral-location" name="fi-text-funeralLocation" required />
             </div>
 
             <div class="sr-form__group">
               <label for="burial-site">Burial Site</label>
-              <input type="text" id="burial-site" name="burial_site" required />
+              <input type="text" id="burial-site" name="fi-text-burialSite" required />
             </div>
 
             <div class="sr-form__group">
               <label for="notes">Additional Details</label>
               <textarea
                 id="notes"
-                name="message"
+                name="fi-text-additionalDetails"
                 rows="4"
                 placeholder="Procession size, special requests, or other details."
               ></textarea>
@@ -419,6 +416,7 @@
     </div>
   </footer>
 
+  <script src="https://forminit.com/sdk/v1/forminit.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -441,7 +439,8 @@
     const phoneInput = document.getElementById('phone');
     const formStatus = document.getElementById('form-status');
     const submitButton = requestForm ? requestForm.querySelector('button[type="submit"]') : null;
-    let isFallbackSubmitting = false;
+    const forminitClient = typeof Forminit === 'function' ? new Forminit() : null;
+    const forminitFormId = 'hpsynucq7cv';
 
     function setFormStatus(message, state) {
       if (!formStatus) return;
@@ -479,7 +478,6 @@
 
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
-        if (isFallbackSubmitting) return;
         submittedAtEastern.value = getEasternTimestamp();
         if (phoneInput) {
           const normalizedPhone = normalizePhoneNumber(phoneInput.value);
@@ -496,6 +494,8 @@
           phoneInput.value = normalizedPhone;
         }
 
+        if (!forminitClient) return;
+
         event.preventDefault();
         setFormStatus('Sending your request...');
         if (submitButton) {
@@ -505,23 +505,16 @@
 
         try {
           const formData = new FormData(requestForm);
-          const response = await fetch(requestForm.action, {
-            method: 'POST',
-            body: formData
-          });
-          const result = await response.json().catch(() => null);
+          const { error } = await forminitClient.submit(forminitFormId, formData);
 
-          if (!response.ok || !result || !result.success) {
-            throw new Error('Submission failed');
+          if (error) {
+            throw error;
           }
 
           setFormStatus('Request submitted successfully. Our team will contact you shortly.', 'success');
           requestForm.reset();
         } catch (error) {
-          setFormStatus('Online submit had an issue. Retrying with direct send...', 'error');
-          isFallbackSubmitting = true;
-          requestForm.submit();
-          return;
+          setFormStatus(error.message || 'We could not send your request. Please try again or call us.', 'error');
         } finally {
           if (submitButton) {
             submitButton.disabled = false;
