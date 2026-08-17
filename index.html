@@ -471,6 +471,12 @@
       return '';
     }
 
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function () {
+        phoneInput.setCustomValidity('');
+      });
+    }
+
     if (requestForm && submittedAtEastern) {
       requestForm.addEventListener('submit', async function (event) {
         if (isFallbackSubmitting) return;
